@@ -1,0 +1,24 @@
+Versione 0.0.1:
+
+- Creata la classe Angel da passare path lavoro, nome programma, indirzzo (0=master 1= utrente1, 2=utente2 ecc)
+- Crazione delle funzioni base private:
+    - Ch_dir() Cambia la directori di lavoro (in quella corratta pe ril programma in uso)
+    - Check_Path() Controlla se la path indicata esiste
+    - Make_Path() Va a creare la path indicata con makdirs tutte in un botto solo!
+    - FileisPresent() verifica se un file (di comunicazione è pressente)
+    - Write_File_Obj() scrive il file in formato pikle (protocollo 3 fisso py=>3.x)
+    - Read_File_Obj() legge il contenuto del file pikle e lo mette in uan lista (protocol3)
+    
+- Creazioni delle funzioni pubbliche (molte richiamano le private e basta):
+    - Write() funzione per scrivere il file
+    - Read() funzione per leggere il file
+    - Delete_file() funzioe per cancellare un file desiderato
+
+- Aggiunto alla funzione privata write_File_obj, per verificare se la directori ce (BUG2)
+    self._Check_Path(self.Path_Total)
+    self._Ch_Dir(self.Path_Total)
+
+Versione 0.0.2
+
+- probailmete va cambiato il numero_applicazione in lettura e scrittura (invertiti):
+nom_app =0 deve creare il file numero_app1 e nopn 0 e leggere il suo (crtea il file per il clienta  cui è riferito, legge il suo numero)
