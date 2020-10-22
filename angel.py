@@ -17,7 +17,7 @@ from pickle import dump, load
 
 class Angel():
     def __init__(self, path, app_name, app_number):
-        self.AngelVersion = '0.0.1'
+        self.AngelVersion = '0.1'
         self.Path = path #variabile con per la path di lavoro
         self.App_Name = app_name #variabile con il nome del programma
         self.App_Number = str(app_number) #variabile per numero identificativo (0=master)
