@@ -5,14 +5,14 @@ Created on 20 ott 2020
 '''
 import angel
 
-version = 0.2
+version = 0.3
  
 
 Folder_Sync_App = '/home/andrea/SynC'
 App_Name = 'AngelTest'
 add = 0
 s = angel.Angel(Folder_Sync_App, App_Name, add)
-print('Angel Version: ',s.AngelVersion@APP_1)
+print('Angel Version: ',s.AngelVersion + ' @ APP_1')
 
 while True:
     nn = input('For Read=r, For Write=w: ')
