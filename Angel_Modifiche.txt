@@ -1,4 +1,4 @@
-Versione 0.0.1:
+Versione 0.1:
 
 - Creata la classe Angel da passare path lavoro, nome programma, indirzzo (0=master 1= utrente1, 2=utente2 ecc)
 - Crazione delle funzioni base private:
@@ -18,7 +18,7 @@ Versione 0.0.1:
     self._Check_Path(self.Path_Total)
     self._Ch_Dir(self.Path_Total)
 
-Versione 0.0.2
+Versione 0.2
 
 - probailmete va cambiato il numero_applicazione in lettura e scrittura (invertiti):
 nom_app =0 deve creare il file numero_app1 e nopn 0 e leggere il suo (crtea il file per il clienta  cui è riferito, legge il suo numero)
