@@ -18,7 +18,16 @@ Versione 0.1:
     self._Check_Path(self.Path_Total)
     self._Ch_Dir(self.Path_Total)
 
-Versione 0.2
+Versione 0.2:
 
-- probailmete va cambiato il numero_applicazione in lettura e scrittura (invertiti):
-nom_app =0 deve creare il file numero_app1 e nopn 0 e leggere il suo (crtea il file per il clienta  cui è riferito, legge il suo numero)
+- Modificata Funzione Write() e quindi Write_File_Obj():
+	- ora sul file compare il numero del destinatrio "example_2.pkd" è per l'app di indirizzo 2
+- Modificata Funxione Read() e quindi Read_File_Obj():
+	- ora il lettore legge solo il file a lui indirizzato lettore 1 legge "example_0.pkd"
+- L'applicazione che crea il file (o che ne scrive), aggiunge all inizio della sua riga il sui indirizzo prima di '→'
+  Questo per far che sia possibile che più applicazioni possano  fare delle richieste ['app_1→comand']
+ 
+Versione 0.3:
+# migliorare la formatazione della scrittura pkd, mettendo tutto in una tupla con il formato:
+    -(A1,A2,A3) --> A1= Richiedente (app_1); A2= Coamndo (led_on); A3= Valore/i ('red') opp ('red', 240)
+# fare funzioni in agel per semplificare l'estrazione dei dati (split: Richidente, Comando) (split: Parametro, Valore)
