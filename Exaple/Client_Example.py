@@ -8,14 +8,14 @@ import angel
 class Comand_Led(QMainWindow):
     def __init__(self, parent =None):
         super (Comand_Led, self).__init__(parent)
-        self.VersionTestAngel = '0.1'
+        self.VersionTestAngel = '0.2'
         self.Central_Widget = QWidget()
         self.setWindowIcon(QIcon(':/Panoratux.png'))
         self.setGeometry(160,140,250,200)
         self.setWindowTitle('Test for Angel')
         self.Timer = QTimer(self)
         
-        self.Label_1 = QLabel('Comand recived')
+        self.Label_1 = QLabel('Comand Recived From')
         self.Line_1 = QLineEdit()
         self.Line_1.setMaximumHeight(40)
         self.Led_Blu = QLabel()
@@ -47,9 +47,9 @@ class Comand_Led(QMainWindow):
     def AngelRead(self): #function for read data via cloud by Angle
         path = '/home/andrea/SynC'
         app_name = 'AngelTest'
-        app_number = 1
+        app_number = 0
         anx = angel.Angel(path, app_name, app_number)
-        c= anx.Read(read_app_number=0, delete=True)
+        c= anx.Read(delete=True)
         if c is not False:
             return c
 
@@ -57,25 +57,32 @@ class Comand_Led(QMainWindow):
         Date = self.AngelRead()
         try:
             for number in range(len(Date)):
-                Split_List = Date[number].split(' ')
-                if Split_List[0] == 'label':
+                print('--> ',Date)
+                Richiedente, Comando = zip(Date[number].split('→'))
+                print('Richiedente: ',Richiedente,'Comando: ',Comando)
+                Parametro, Valore = zip(Comando[0].split(' '))
+                print('Parametro: ',Parametro,'Valore: ',Valore)
+                if Parametro[0] == 'label':
                     print('--------- Label ---------')
-                    self.Line_1.setText(Split_List[1])
-                if Split_List[0] == 'led':
+                    self.Line_1.setText(Valore[0])
+                elif Parametro[0] == 'led':
                     print('---------- Led ----------')
-                    if Split_List[1] == 'red':
+                    self.Line_1.setText(f'{Richiedente} ha Richiest {Comando}')
+                    if Valore[0] == 'red':
                         self.Led_Red.setPixmap(self.Make_Led('Led_Rosso.png'))
-                    if Split_List[1] == 'blue':
+                    elif Valore[0] == 'blue':
                         self.Led_Blu.setPixmap(self.Make_Led('Led_Blu.png'))
-                    if Split_List[1] == 'green':
+                    elif Valore[0] == 'green':
                         self.Led_Green.setPixmap(self.Make_Led('Led_Verde.png'))
-                    if Split_List[1] == 'off':
+                    elif Valore[0] == 'off':
                         self.Led_Red.setPixmap(self.Make_Led('Led_Spento.png'))
                         self.Led_Blu.setPixmap(self.Make_Led('Led_Spento.png'))
                         self.Led_Green.setPixmap(self.Make_Led('Led_Spento.png'))
                         
         except(TypeError):
             pass
+        except(ValueError):
+            self.Line_1.setText('Valori Errati!!')
             
     def Write_Label(self, text):
         self.Line_1.setText(text[0])
