@@ -7,9 +7,9 @@ functions:
     - path --> path of the cloud directory (str)
     - app_name --> program name (str)
     - app_number --> client number (int)
-- Write(text) --> text= all in string mode (strings, numbers, lists, ecc)
-- Read(read_app_number, delete) --> read_app_number = client number to read, 
-  delete=TRUE delete (file FALSE non delete)
+- Write(text, to_app_number) --> text= all in string mode (strings, numbers, lists, ecc)
+                                 to_app_number= number (address) of the app to contact <int>
+- Readdelete) --> delete=TRUE delete (file FALSE non delete)
 - Delete_File(file_name) --> file_name name of the file to delete
 '''
 from os import makedirs, path, chdir, remove
@@ -17,22 +17,23 @@ from pickle import dump, load
 
 class Angel():
     def __init__(self, path, app_name, app_number):
-        self.AngelVersion = '0.1'
+        self.AngelVersion = '0.2'
         self.Path = path #variabile con per la path di lavoro
         self.App_Name = app_name #variabile con il nome del programma
-        self.App_Number = str(app_number) #variabile per numero identificativo (0=master)
+        self.App_Number = app_number #variabile per numero identificativo (0=master)
         self.Path_Total = self.Path+'/'+self.App_Name #crea il percorso completo
-        self.File_Name = self.App_Name+'_'+self.App_Number+'.pkd' #crea il nome corretto del file
+        #self.File_Name = self.App_Name+'_'+self.App_Number+'.pkd' #crea il nome corretto del file
         
         self._Initialize(self.Path_Total)
         
     # ---------------- Funzioni Pubbliche -------------------------------------
     
-    def Write(self, text): #funzione pubblica per scrivere il file pickle
-        self._Write_File_Obj(self.File_Name, text) #chiama il metodo privato
+    def Write(self, text, to_app_number): #funzione pubblica per scrivere il file pickle
+        File_Write = self.File_Name = self.App_Name+'_'+str(to_app_number)+'.pkd' #crea il nome corretto del file
+        self._Write_File_Obj(File_Write, text) #chiama il metodo privato
         
-    def Read(self, read_app_number, delete=True): #funzione pubblica per leggere il file pickle
-        File_Read = self.App_Name+'_'+str(read_app_number)+'.pkd'
+    def Read(self, delete=True): #funzione pubblica per leggere il file pickle
+        File_Read = self.App_Name+'_'+str(self.App_Number)+'.pkd'
         return self._Read_File_Obj(File_Read, delete) #chiama il metodo privato
     
     def Delete_File(self, file_name): #funzione pubblica per cancellare un file specifico
@@ -48,8 +49,9 @@ class Angel():
     def _Write_File_Obj(self, file_name, text, mode='ab', protocol=3): #scrittura file pickle
         self._Check_Path(self.Path_Total) #contolla la ptha se non ce la ricrea (BUG2)
         self._Ch_Dir(self.Path_Total) #punta alla directori corratta di lavoro
+        app_number = 'app_'+str(self.App_Number)+'→' # aggiungi automaticamente l'indirz. di chi scrive (altgr+i)
         with open(file_name, mode) as File_W: #apri o crea il file mode (ab = append binario)
-            dump(text, File_W, protocol)# scrivi con pikle prtocollo3
+            dump(app_number+text, File_W, protocol)# scrivi con pikle prtocollo3
             #print('scritto--> ', text)
             
     def _Read_File_Obj(self, file_name, delete=True): #lettura file pickle
