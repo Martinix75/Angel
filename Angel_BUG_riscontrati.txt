@@ -1,3 +1,3 @@
-Ver 0.0.1
+Ver 0.1
 - BUG1: se si va a leggere il file e questo non ce (specie in un for) va tutto in errore aggiunto un else : return False
 - BUG2: se la directory di lavoro viene a mancare angle non ricrea il tutto e quindi non scrive
