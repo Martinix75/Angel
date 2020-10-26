@@ -5,7 +5,7 @@ Created on 20 ott 2020
 '''
 import angel
 
-version = 0.3
+version = 0.3.1
  
 
 Folder_Sync_App = '/home/andrea/SynC'
@@ -24,7 +24,7 @@ while True:
                 print (z)
     elif nn == 'w':
         cc = input('Inserisci stringa--> ')
-        s.Write(cc, 0)
+        s.Write(cc, 2, 1)
     elif nn == 'e':
         break
     #time.sleep(2)
