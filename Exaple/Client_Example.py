@@ -8,11 +8,11 @@ import angel
 class Comand_Led(QMainWindow):
     def __init__(self, parent =None):
         super (Comand_Led, self).__init__(parent)
-        self.VersionTestAngel = '0.2'
+        self.VersionTestAngel = '0.3'
         self.Central_Widget = QWidget()
         self.setWindowIcon(QIcon(':/Panoratux.png'))
-        self.setGeometry(160,140,250,200)
-        self.setWindowTitle('Test for Angel')
+        self.setGeometry(160,140,370,200)
+        self.setWindowTitle(f'Test for Angel Ver: {self.VersionTestAngel}')
         self.Timer = QTimer(self)
         
         self.Label_1 = QLabel('Comand Recived From')
@@ -57,28 +57,25 @@ class Comand_Led(QMainWindow):
         Date = self.AngelRead()
         try:
             for number in range(len(Date)):
-                print('--> ',Date)
-                Richiedente, Comando = zip(Date[number].split('→'))
-                print('Richiedente: ',Richiedente,'Comando: ',Comando)
-                Parametro, Valore = zip(Comando[0].split(' '))
-                print('Parametro: ',Parametro,'Valore: ',Valore)
-                if Parametro[0] == 'label':
+                print('--> ',Date,number)
+                N_app, Parametro, Value_1 = Date[number][0], Date[number][1], Date[number][2]
+                if Parametro == 'label':
                     print('--------- Label ---------')
-                    self.Line_1.setText(Valore[0])
-                elif Parametro[0] == 'led':
+                    self.Line_1.setText(f'{N_app}: {Value_1}')
+                elif Parametro == 'led':
                     print('---------- Led ----------')
-                    self.Line_1.setText(f'{Richiedente} ha Richiest {Comando}')
-                    if Valore[0] == 'red':
+                    self.Line_1.setText(f'{N_app} ha Richiesto {Value_1}')
+                    if Value_1 == 'red':
                         self.Led_Red.setPixmap(self.Make_Led('Led_Rosso.png'))
-                    elif Valore[0] == 'blue':
+                    elif Value_1 == 'blue':
                         self.Led_Blu.setPixmap(self.Make_Led('Led_Blu.png'))
-                    elif Valore[0] == 'green':
+                    elif Value_1 == 'green':
                         self.Led_Green.setPixmap(self.Make_Led('Led_Verde.png'))
-                    elif Valore[0] == 'off':
+                    elif Value_1 == 'off':
                         self.Led_Red.setPixmap(self.Make_Led('Led_Spento.png'))
                         self.Led_Blu.setPixmap(self.Make_Led('Led_Spento.png'))
                         self.Led_Green.setPixmap(self.Make_Led('Led_Spento.png'))
-                        
+
         except(TypeError):
             pass
         except(ValueError):
