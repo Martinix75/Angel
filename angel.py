@@ -7,9 +7,11 @@ functions:
     - path --> path of the cloud directory (str)
     - app_name --> program name (str)
     - app_number --> client number (int)
-- Write(text, to_app_number) --> text= all in string mode (strings, numbers, lists, ecc)
+- Write(text, to_app_number, n_splits=1) --> text= all in string mode (strings, numbers, lists, ecc)
                                  to_app_number= number (address) of the app to contact <int>
-- Readdelete) --> delete=TRUE delete (file FALSE non delete)
+                                 n_splits=1= split numbers to do (default=1)
+- Read(delete) --> delete=TRUE delete (file FALSE non delete)
+                   example read --> [['app_1', 'string_1', 'string_2']]
 - Delete_File(file_name) --> file_name name of the file to delete
 '''
 from os import makedirs, path, chdir, remove
@@ -17,20 +19,19 @@ from pickle import dump, load
 
 class Angel():
     def __init__(self, path, app_name, app_number):
-        self.AngelVersion = '0.2'
+        self.AngelVersion = '0.3'
         self.Path = path #variabile con per la path di lavoro
         self.App_Name = app_name #variabile con il nome del programma
-        self.App_Number = app_number #variabile per numero identificativo (0=master)
+        self.App_Number = app_number #variabile per numero identificativo 
         self.Path_Total = self.Path+'/'+self.App_Name #crea il percorso completo
-        #self.File_Name = self.App_Name+'_'+self.App_Number+'.pkd' #crea il nome corretto del file
-        
+
         self._Initialize(self.Path_Total)
         
     # ---------------- Funzioni Pubbliche -------------------------------------
     
-    def Write(self, text, to_app_number): #funzione pubblica per scrivere il file pickle
+    def Write(self, text, to_app_number, n_splits=1): #funzione pubblica per scrivere il file pickle
         File_Write = self.File_Name = self.App_Name+'_'+str(to_app_number)+'.pkd' #crea il nome corretto del file
-        self._Write_File_Obj(File_Write, text) #chiama il metodo privato
+        self._Write_File_Obj(File_Write, text, n_splits) #chiama il metodo privato
         
     def Read(self, delete=True): #funzione pubblica per leggere il file pickle
         File_Read = self.App_Name+'_'+str(self.App_Number)+'.pkd'
@@ -46,34 +47,45 @@ class Angel():
         self._Check_Path(pathx) #controlal se ce il percorso altrimenti crealo
         self._Ch_Dir(pathx) #cambia directori di lavoro (in quella del programma asegnato)
     
-    def _Write_File_Obj(self, file_name, text, mode='ab', protocol=3): #scrittura file pickle
-        self._Check_Path(self.Path_Total) #contolla la ptha se non ce la ricrea (BUG2)
+    def _Write_File_Obj(self, file_name, text, n_splits, mode='ab', protocol=3): #scrittura file pickle
+        Text_Split = self._Split_Text_Input(text, n_splits)# splitta il testo in ingresso
+        self._Check_Path(self.Path_Total) #contolla la phat se non ce la ricrea (BUG2)
         self._Ch_Dir(self.Path_Total) #punta alla directori corratta di lavoro
-        app_number = 'app_'+str(self.App_Number)+'→' # aggiungi automaticamente l'indirz. di chi scrive (altgr+i)
+        app_number = 'app_'+str(self.App_Number)# crea variabil nome+numero app che scrive))
+        Write_Tuple = [app_number] # mette come primo valore alla lista in lome dell'app richiedente
+        for ArgX in Text_Split: #crea la lista con tutte le voci splittate mandate
+            Write_Tuple.append(ArgX) #appende alla lista ogni singola voce del la stringa inviata
         with open(file_name, mode) as File_W: #apri o crea il file mode (ab = append binario)
-            dump(app_number+text, File_W, protocol)# scrivi con pikle prtocollo3
+            dump(Write_Tuple, File_W, protocol)# scrivi con pickle prtocollo3
             #print('scritto--> ', text)
+            
+    def _Split_Text_Input(self, text, n_splits):
+        try:
+            return text.split(' ', n_splits) #ritorna la lista splitta
+        except(ValueError): # se non ci son spazi..
+            return text #ritorna la stringa cosi comè
+        
             
     def _Read_File_Obj(self, file_name, delete=True): #lettura file pickle
         if self._FileisPresent(file_name): # se il file esiste allora....
-            Date=[] #cra la lista dove inserire le singole voci
+            Date=[] #crea la lista dove inserire le singole voci
             with open(file_name, 'rb') as File_R: #apri il file in lattura binaria
-                try: # quando compare eeore esci e va avanti
+                try: # quando compare errore esci e va avanti
                     while True:# cicla fino alal comparsa dell errore (fine dati)
                         Date.append(load(File_R)) #aggiungi la voce alla lista
                 except(EOFError): #... va avanti.. senza fare nulla
                     pass
             if delete: # se attiva l'opzione delete, cancella il file letto
-                self.Delete_File(file_name) # chiam la f(x) di cancellazione
+                self.Delete_File(file_name) # chiama la f(x) di cancellazione
             return Date #torna la lista con i valori
         else:
             return False #correzione (BUG1)
     
     def _FileisPresent(self, file_name):# controlla se il file indicato è presente o meno
-        if path.isfile(file_name):
-            return True
+        if path.isfile(file_name): #se il file esiste...
+            return True # ...ritorna True
         else:
-            return False
+            return False #... altrimenti torna False
         
     def _Make_Path(self, pathx): #crea il percorso coretto
         if path.exists(pathx) == False: #valuta se esite il percorso indicato se no..
