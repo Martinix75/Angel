@@ -28,6 +28,9 @@ Versione 0.2:
   Questo per far che sia possibile che più applicazioni possano  fare delle richieste ['app_1→comand']
  
 Versione 0.3:
-# migliorare la formatazione della scrittura pkd, mettendo tutto in una tupla con il formato:
-    -(A1,A2,A3) --> A1= Richiedente (app_1); A2= Coamndo (led_on); A3= Valore/i ('red') opp ('red', 240)
-# fare funzioni in agel per semplificare l'estrazione dei dati (split: Richidente, Comando) (split: Parametro, Valore)
+- Aggiunta la funzione Split_Text_Input() splitta la stringa d'ingresso in "comando" e "valore " led 1 <str> -> ('val1', 'value2'...)<tupla>
+- Modificata la funzione Write_File_Obj():
+    il metodo dump ora scrive i dati in una lista con struttura --> ('app_number','val1','val2','val3',...)
+    struttura: ('numero_app_scrivente', 'value_1 (comado), 'valore_1','valore_2'..)
+               valore 1 --> è usato tipicamente per indicare un comando, ma si può mettere tutto cio che si vuole!
+- Aggiunto alla funzione Split_Text_Input(), il parametro "n_split" per indicare quanti spazi splittare (defalult 1)
